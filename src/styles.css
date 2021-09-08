@@ -7,3 +7,9 @@
           .is-red {
             border-color: #dc3545;
           }
+
+
+#themecolors .selector{
+
+  cursor:pointer;
+}
