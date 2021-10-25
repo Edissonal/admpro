@@ -9,29 +9,31 @@ import { Subscription } from 'rxjs';
   styles: [
   ]
 })
-export class BreadcrumbsComponent implements OnInit, OnDestroy {
+export class BreadcrumbsComponent implements OnDestroy {
+  
+  public titulo: string;
+  public tituloSubs$: Subscription;
+
 
   constructor(private router: Router,
               private route: ActivatedRoute) {
-    console.log(route.snapshot.children[0].data);
+              console.log(route.snapshot.children[0].data);
+
+              this.tituloSubs$= this.getArgumentos().subscribe(({titulo}) => {
+                this.titulo = titulo;
+                document.title = `AdminPro -${titulo}`;
+            });
                }
   
 
 
 
-  public titulo: string;
-  public tituloSubs$: Subscription;
-
 ngOnDestroy(): void {
   this.tituloSubs$.unsubscribe();
 }
 
-  ngOnInit(): void {
-    this.tituloSubs$= this.getArgumentos().subscribe(({titulo}) => {
-      this.titulo = titulo;
-      document.title = `AdminPro -${titulo}`;
-  });
-  }
+ /* ngOnInit(): void {
+  }*/
 
   getArgumentos() {
     return this.router.events
