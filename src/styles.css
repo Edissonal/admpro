@@ -32,6 +32,10 @@ width: 100px;
   width: 150px;
   }
 
+  .w200{
+    width: 200px;
+    }
+  
 .avatar{
   border:1px solid  grey;
   border-radius: 100%;
