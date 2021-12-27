@@ -41,6 +41,10 @@ export class UsuarioService {
     
     return this.usuario.uid || '';
   }
+
+  get role(): 'ADMIN_ROLE' |'USER_ROLE'{
+    return this.usuario.role;
+  }
   
   get headers() {
    return {
@@ -69,6 +73,7 @@ export class UsuarioService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('menu');
 
     this.auth2.signOut().then(() => {
       this.ngZone.run(() => {
@@ -77,6 +82,13 @@ export class UsuarioService {
 
     });
   }
+
+  GuardarLocalStorage(token: string, menu: any) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('menu',JSON.stringify(menu));
+   
+ }
+
 
   validarToken():Observable<boolean> {
    // const token = localStorage.getItem('token') || '';
@@ -98,7 +110,7 @@ export class UsuarioService {
         } = resp.usuario;
 
         this.usuario = new Usuario(nombre, email, null, img, google, role, uid);
-        localStorage.setItem('token', resp.token)
+        this.GuardarLocalStorage(resp.token, resp.menu);
         return true;
       }),
       catchError(error => of(false))
@@ -112,7 +124,7 @@ export class UsuarioService {
     return this.http.post(`${base_url}/usuarios`, formData)
                 .pipe(
                   tap((res:any) => {
-                    localStorage.setItem('token',res.token)
+                    this.GuardarLocalStorage(res.token, res.menu);
                             }
                           )
                         )
@@ -152,7 +164,7 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login`, formData)
       .pipe(
         tap((res:any) => {
-          localStorage.setItem('token',res.token)
+          this.GuardarLocalStorage(res.token, res.menu);
                   }
                 )
               )
@@ -162,7 +174,7 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login/google`, {token})
       .pipe(
         tap((res:any) => {
-          localStorage.setItem('token',res.token)
+          this.GuardarLocalStorage(res.token, res.menu);
                   }
                 )
               )
